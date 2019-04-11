@@ -10,6 +10,8 @@ namespace KD.CQRS.Providers
     /// 1. Header: "cqrs-command", Value: "My.Namespace.With.IMyAwesomeCommandInterfaceName"
     /// or
     /// 2. Header: "cqrs-query", Value: "My.Namespace.With.IMyAwesomeQueryInterfaceName"
+    ///
+    /// Also, the body of the message should be able to be cast to the input object (query or command input).
     /// </summary>
     public class DefaultCqrsProvider : ICqrsProvider
     {
