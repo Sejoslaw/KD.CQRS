@@ -103,8 +103,7 @@ namespace KD.CQRS.Middleware
             {
                 messageType = FindBaseType(baseInterfaces);
 
-                if ((messageType.IsGenericType && messageType.GetGenericTypeDefinition() == typeof(IQuery<,>)) ||
-                    (messageType.IsGenericType && messageType.GetGenericTypeDefinition() == typeof(ICommand<>)))
+                if (messageType != null)
                 {
                     return messageType;
                 }
