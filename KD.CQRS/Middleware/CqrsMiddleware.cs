@@ -52,19 +52,17 @@ namespace KD.CQRS.Middleware
             }
 
             // Command or query type
-            Type messageType = null;
+            Type messageType;
 
             if (CqrsProvider.IsCommand(httpContext))
             {
                 messageType = CqrsProvider.GetCommandType(httpContext);
             }
-
-            if (CqrsProvider.IsQuery(httpContext))
+            else if (CqrsProvider.IsQuery(httpContext))
             {
                 messageType = CqrsProvider.GetQueryType(httpContext);
             }
-
-            if (messageType == null)
+            else
             {
                 throw new ArgumentException($"Cannot read query nor command name from HTTP context.", nameof(httpContext));
             }
