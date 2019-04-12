@@ -32,5 +32,14 @@ namespace KD.CQRS.Providers
         /// <param name="context"></param>
         /// <returns></returns>
         Type GetQueryType(HttpContext context);
+        /// <summary>
+        /// Returns parsed data from request.
+        /// 
+        /// NOTE: This data will be further passed as first parameter to command or query.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="messageBaseType"> Type of a model to be passed to Query or Command </param>
+        /// <returns></returns>
+        object GetMessageData(HttpContext context, Type messageBaseType);
     }
 }

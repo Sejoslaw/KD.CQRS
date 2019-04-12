@@ -1,4 +1,4 @@
-﻿using KD.CQRS.Middleware;
+﻿using KD.CQRS.Providers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -23,7 +23,8 @@ namespace KD.CQRS.TestApp
             }
 
             // For testing purposes allow any request to be authorized.
-            app.UseCqrs(context => true);
+            // For different request reading (different standards) it is possible to specify custom CQRS Provider.
+            app.UseCqrs(new DefaultCqrsProvider(), (context => true));
 
             app.Run(async (context) =>
             {

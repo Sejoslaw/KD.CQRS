@@ -1,6 +1,8 @@
 ﻿using KD.CQRS.Middleware;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Reflection;
 
 namespace KD.CQRS.Providers
@@ -37,6 +39,14 @@ namespace KD.CQRS.Providers
             string headerValue = context.Request.Headers[CqrsHeaders.CQRS_QUERY];
             Type queryType = GetType(headerValue);
             return queryType;
+        }
+
+        public object GetMessageData(HttpContext context, Type messageBaseType)
+        {
+            var reader = new StreamReader(context.Request.Body);
+            string body = reader.ReadToEnd();
+            object data = JsonConvert.DeserializeObject(body, messageBaseType);
+            return data;
         }
 
         private Type GetType(string fullName)

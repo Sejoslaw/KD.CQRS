@@ -1,9 +1,7 @@
 ﻿using KD.CQRS.Core;
 using KD.CQRS.Providers;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace KD.CQRS.Middleware
@@ -64,7 +62,8 @@ namespace KD.CQRS.Middleware
             }
             else
             {
-                throw new ArgumentException($"Cannot read query nor command name from HTTP context.", nameof(httpContext));
+                await Next(httpContext);
+                return;
             }
 
             // Get command or query from container
@@ -75,18 +74,10 @@ namespace KD.CQRS.Middleware
 
             // Get data object from request body
             // 0-index element will always be an input to query or command
-            object data = GetData(httpContext.Request.Body, messageBaseType.GetGenericArguments()[0]);
+            object data = CqrsProvider.GetMessageData(httpContext, messageBaseType.GetGenericArguments()[0]);
 
             // Execute command or query
             messageBaseType.GetMethod("Execute").Invoke(message, new object[] { data });
-        }
-
-        private object GetData(Stream requestBody, Type messageBaseType)
-        {
-            var reader = new StreamReader(requestBody);
-            string body = reader.ReadToEnd();
-            object data = JsonConvert.DeserializeObject(body, messageBaseType);
-            return data;
         }
 
         private Type FindBaseType(Type messageType)
